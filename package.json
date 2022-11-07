@@ -1,0 +1,42 @@
+{
+  "name": "movies",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "PORT=3002 next dev",
+    "build": "next build",
+    "start": "PORT=3002 next start",
+    "lint": "next lint",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "netflix-scrapper": "npm run cypress:run --spec netflix-spec.cy.ts",
+    "netflix-to-tmdb": "npm run cypress:run --spec netflix-to-tmdb-spec.cy.ts"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/material": "^5.10.12",
+    "@prisma/client": "^4.5.0",
+    "axios": "^1.1.3",
+    "next": "13.0.0",
+    "prisma": "^4.5.0",
+    "puppeteer": "^19.2.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "swr": "^1.3.0",
+    "ts": "^0.2.2",
+    "ts-node": "^10.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "18.11.8",
+    "@types/react": "18.0.24",
+    "@types/react-dom": "18.0.8",
+    "cypress": "^10.11.0",
+    "eslint": "8.26.0",
+    "eslint-config-next": "13.0.0",
+    "typescript": "4.8.4"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  }
+}
