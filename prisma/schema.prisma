@@ -1,0 +1,183 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model Movie {
+  id                  Int                @id @default(autoincrement())
+  name                String?
+  image               String?
+  year                Int?
+  filmaffinity        FilmaffinityMovie? @relation(fields: [filmaffinityMovieId], references: [id])
+  netflix             NetflixMovie?      @relation(fields: [netflixMovieId], references: [id])
+  imdb                IMDBMovie?         @relation(fields: [imdbMovieId], references: [id])
+  rottenTomatoes      RottenTomatoes?    @relation(fields: [rottenTomatoesId], references: [id])
+  imdbMovieId         Int?               @unique
+  filmaffinityMovieId Int?               @unique
+  netflixMovieId      Int?               @unique
+  rottenTomatoesId    Int?               @unique
+  movieCredits        MovieCredits?
+  genres              Genre[]
+  GenresOnMovies      GenresOnMovies[]
+  budget              Int?
+  homepage            String?
+}
+
+model MovieCredits {
+  movieId Int          @id @unique
+  cast    CastCredit[]
+  crew    CrewCredit[]
+  movie   Movie?       @relation(fields: [movieId], references: [id])
+}
+
+model CastCredit {
+  credit_id            String        @id
+  cast_id              Int?
+  adult                Boolean?
+  gender               Int?
+  person_id            Int?
+  known_for_department String?
+  name                 String?
+  original_name        String?
+  popularity           Float?
+  profile_path         String?
+  character            String?
+  department           String?
+  job                  String?
+  order                Int?
+  MovieCredits         MovieCredits? @relation(fields: [movieCreditsId], references: [movieId])
+  movieCreditsId       Int?
+  Person               Person?       @relation(fields: [personId], references: [id])
+  personId             Int?
+}
+
+model CrewCredit {
+  credit_id            String        @id
+  adult                Boolean?
+  gender               Int?
+  known_for_department String?
+  name                 String?
+  original_name        String?
+  popularity           Float?
+  profile_path         String?
+  cast_id              Int?
+  character            String?
+  order                Int?
+  MovieCredits         MovieCredits? @relation(fields: [movieCreditsId], references: [movieId])
+  movieCreditsId       Int?
+  Person               Person?       @relation(fields: [personId], references: [id])
+  personId             Int?
+}
+
+model Person {
+  id                   Int          @id
+  biography            String?
+  birthday             String?
+  deathday             String?
+  gender               Int?
+  homepage             String?
+  imdb_id              String?
+  known_for_department String?
+  name                 String?
+  place_of_birth       String?
+  popularity           Int?
+  profile_path         String?
+  castCredits          CastCredit[]
+  crewCredits          CrewCredit[]
+}
+
+model Genre {
+  id             Int              @id @default(autoincrement())
+  name           String?
+  GenresOnMovies GenresOnMovies[]
+  Movie          Movie?           @relation(fields: [movieId], references: [id])
+  movieId        Int?
+}
+
+model GenresOnMovies {
+  genre      Genre    @relation(fields: [genreId], references: [id])
+  genreId    Int // relation scalar field (used in the `@relation` attribute above)
+  movie      Movie    @relation(fields: [movieId], references: [id])
+  movieId    Int // relation scalar field (used in the `@relation` attribute above)
+  assignedAt DateTime @default(now())
+
+  @@id([genreId, movieId])
+}
+
+model FilmaffinityMovie {
+  id        Int      @id
+  createdAt DateTime @default(now())
+  name      String?
+  rating    Float?
+  votes     Int?
+  movie     Movie?
+}
+
+model IMDBMovie {
+  id        Int      @id
+  createdAt DateTime @default(now())
+  name      String?
+  rating    Float?
+  votes     Int?
+  movie     Movie?
+}
+
+model RottenTomatoes {
+  id                                              Int      @id
+  createdAt                                       DateTime @default(now())
+  name                                            String?
+  tomatometerAllCriticsPrositiveReviewPercentatge Int?
+  tomatometerAllCriticsNumReviews                 Int?
+  tomatometerTopCriticsPrositiveReviewPercentatge Int?
+  tomatometerTopCriticsNumReviews                 Int?
+  verifiedAudiencePercentatge                     Int?
+  verifiedAudienceNumRatings                      Int?
+  allAudiencePercentatge                          Int?
+  allAudienceNumRatings                           Int?
+  movieId                                         Int?
+  Movie                                           Movie?
+}
+
+model NetflixMovie {
+  id                    Int      @id
+  createdAt             DateTime @default(now())
+  title                 String?
+  releaseYear           Int?
+  requestId             String?
+  type                  String?
+  isOriginal            Boolean?
+  availabilityDate      String?
+  availabilityStartTime Int?
+  isPlayable            Boolean?
+  searchIndex           Int?
+  orderQuery            String?
+  movie                 Movie?
+}
+
+model NotFoundNetflixMovie {
+  id                    Int      @id
+  createdAt             DateTime @default(now())
+  title                 String?
+  releaseYear           Int?
+  requestId             String?
+  type                  String?
+  isOriginal            Boolean?
+  availabilityDate      String?
+  availabilityStartTime Int?
+  isPlayable            Boolean?
+  searchIndex           Int?
+  orderQuery            String?
+}
+
+// npx prisma db push
+// npx prisma migrate dev
+// npx prisma db seed
+// npx prisma studio
