@@ -16,6 +16,7 @@ model Movie {
   name                String?
   image               String?
   year                Int?
+  releaseDate         String?
   filmaffinity        FilmaffinityMovie? @relation(fields: [filmaffinityMovieId], references: [id])
   netflix             NetflixMovie?      @relation(fields: [netflixMovieId], references: [id])
   imdb                IMDBMovie?         @relation(fields: [imdbMovieId], references: [id])
