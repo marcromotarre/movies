@@ -1,4 +1,4 @@
-import prisma from "../../../lib/prisma";
+import { prisma }  from "../../../lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const CreateUpdateFilmaffinityMovie = async (
@@ -8,8 +8,12 @@ const CreateUpdateFilmaffinityMovie = async (
   const { movieId } = req.body;
   let movie;
   try {
-    movie = await prisma.movieCredits.create({
-      data: {
+    movie = await prisma.movieCredits.upsert({
+      where: {
+        movieId,
+      },
+      update: {},
+      create: {
         movieId,
       },
     });

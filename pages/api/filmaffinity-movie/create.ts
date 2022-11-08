@@ -1,14 +1,14 @@
-import prisma from "../../../lib/prisma";
+import { prisma } from "../../../lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const CreateUpdateFilmaffinityMovie = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
-  const { id, name, rating, votes } = req.body;
-  let movie;
+  const { id, name, rating, votes, movie } = req.body;
+  let fmovie;
   try {
-    movie = await prisma.filmaffinityMovie.upsert({
+    fmovie = await prisma.filmaffinityMovie.upsert({
       where: {
         id,
       },
@@ -16,21 +16,23 @@ const CreateUpdateFilmaffinityMovie = async (
         name,
         rating,
         votes,
+        movie: { connect: { id: movie } },
       },
       create: {
         id,
         name,
         rating,
         votes,
+        movie: { connect: { id: movie } },
       },
     });
   } catch (e) {
     res.status(401);
-    res.json({ error: "Movie" });
+    res.json({ error: "Filmaffinity Movie", e });
     return;
   }
 
-  res.json(movie);
+  res.json(fmovie);
 };
 
 export default CreateUpdateFilmaffinityMovie;

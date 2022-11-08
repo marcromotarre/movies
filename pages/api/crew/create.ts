@@ -1,4 +1,4 @@
-import prisma from "../../../lib/prisma";
+import { prisma }  from "../../../lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const CreateMultipleCrewCredit = async (
@@ -10,7 +10,6 @@ const CreateMultipleCrewCredit = async (
       data: [
         ...req.body.map((crew: any) => ({
           credit_id: crew.credit_id,
-          id: crew.id,
           movieCreditsId: crew.movieCreditsId,
           profile_path: crew.profile_path,
           cast_id: crew.cast_id,
@@ -23,6 +22,8 @@ const CreateMultipleCrewCredit = async (
       ],
       skipDuplicates: true,
     });
+    res.status(200);
+    res.json(createMany);
   } catch (e) {
     res.status(401);
     res.json({ error: e });

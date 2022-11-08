@@ -1,4 +1,4 @@
-import prisma from "../../../lib/prisma";
+import { prisma } from "../../../lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const CreateUpdateNetflixMovie = async (
@@ -7,7 +7,16 @@ const CreateUpdateNetflixMovie = async (
 ) => {
   let movies;
   try {
-    movies = await prisma.movie.findMany();
+    movies = await prisma.movie.findMany({
+      include: {
+        movieCredits: {
+          include: {
+            cast: true,
+            crew: true,
+          },
+        },
+      },
+    });
   } catch (e) {
     res.status(401);
     res.json({ error: "Cannot find Movies" });

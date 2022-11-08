@@ -1,17 +1,21 @@
-import { prisma }  from "../../../lib/prisma";
+import { prisma } from "../../../lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const CreateUpdateNetflixMovie = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
-  const { id, title, releaseYear } = req.body;
   let movies;
   try {
-    movies = await prisma.filmaffinityMovie.findMany();
+    movies = await prisma.movie.findMany({
+      where: { NOT: [{ filmaffinityMovieId: null }] },
+      include: {
+        filmaffinity: true,
+      },
+    });
   } catch (e) {
     res.status(401);
-    res.json({ error: "Cannot find Filmaffinity Movies" });
+    res.json({ error: "Cannot find Movies for Gallery" });
     return;
   }
 

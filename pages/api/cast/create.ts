@@ -1,4 +1,4 @@
-import prisma from "../../../lib/prisma";
+import { prisma }  from "../../../lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const CreateMultipleCastCredit = async (
@@ -20,11 +20,13 @@ const CreateMultipleCastCredit = async (
           //order: cast.order,
           profile_path: cast.profile_path,
           cast_id: cast.cast_id,
-          movieCreditsId: cast.movieCreditsId
+          movieCreditsId: cast.movieCreditsId,
         })),
       ],
       skipDuplicates: true,
     });
+    res.status(200);
+    res.json(createMany);
   } catch (e) {
     res.status(401);
     res.json({ error: e });

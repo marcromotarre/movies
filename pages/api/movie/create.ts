@@ -1,11 +1,11 @@
-import prisma from "../../../lib/prisma";
+import { prisma } from "../../../lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const CreateUpdateFilmaffinityMovie = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
-  const { id, name, netflixMovieId, image, movieCredits } = req.body;
+  const { id, name, netflixMovieId, image, movieCredits, year } = req.body;
   let movie;
   try {
     movie = await prisma.movie.upsert({
@@ -17,12 +17,14 @@ const CreateUpdateFilmaffinityMovie = async (
         netflixMovieId,
         image,
         movieCredits,
+        year,
       },
       create: {
         id,
         name,
         netflixMovieId,
         image,
+        year,
       },
     });
   } catch (e) {

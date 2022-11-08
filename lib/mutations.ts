@@ -13,7 +13,13 @@ export const LinkNetflixMovie = (body: {
   return fetcher(`/api/movie/create`, body);
 };
 
-export const createFilmaffinityMovie = (body: { id: number; name: string }) => {
+export const createFilmaffinityMovie = (body: {
+  id: number;
+  name: string;
+  votes: number;
+  rating: number;
+  movieId: number;
+}) => {
   return fetcher(`/api/filmaffinity-movie/create`, body);
 };
 
@@ -41,22 +47,24 @@ export const getMovies = () => {
   return fetcher(`/api/movie`);
 };
 
+export const getMoviesGallery = () => {
+  return fetcher(`/api/movies-gallery`);
+};
+
 export const deleteMovies = () => {
   return fetcher(`/api/movie/delete`);
 };
 
 export const createCast = (body: any) => {
-  return fetcher(`/api/cast/create`,body);
+  return fetcher(`/api/cast/create`, body);
 };
-
 
 export const createCrew = (body: any) => {
-  return fetcher(`/api/crew/create`,body);
+  return fetcher(`/api/crew/create`, body);
 };
 
-
 export const createMovieCredits = (body: any) => {
-  return fetcher(`/api/movie-credits/create`,body);
+  return fetcher(`/api/movie-credits/create`, body);
 };
 
 const TMDB_API_KEY = "480ff227df49aaa3c76ea70d0462d207";
